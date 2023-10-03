@@ -1,0 +1,342 @@
+﻿<Window x:Class="Газопровод.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Газопровод"
+        mc:Ignorable="d"
+        Title="Gaz pipeline"
+        Height="1100"
+        Width="1600"
+        WindowState="Maximized"
+        FontSize="16">
+    <Window.Resources>
+        <Style x:Key="TextBlockStyle">
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+            <Setter Property="Control.Width" Value="275" />
+            <Setter Property="Control.HorizontalAlignment" Value="Left" />
+            <Setter Property="Control.Margin" Value="10 5 0 0" />
+        </Style>
+        <Style x:Key="TextBlockTitleStyle">
+            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+            <Setter Property="Control.Width" Value="350" />
+            <Setter Property="Control.FontSize" Value ="18"/>
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+            <Setter Property="TextBlock.FontWeight" Value="Bold" />
+            <Setter Property="Control.HorizontalAlignment" Value="Left" />
+            <Setter Property="Control.Margin" Value="10 5 0 10" />
+        </Style>
+        <Style x:Key="TextBlocPolinomekStyle">
+            <Setter Property="Control.HorizontalAlignment" Value="Left" />
+            <Setter Property="Control.Margin" Value="10 5 0 0" />
+        </Style>
+        <Style x:Key="TextBoxStylePolinome">
+            <Setter Property="Control.Width" Value="200" />
+            <Setter Property="Control.Margin" Value="10 5 0 0" />
+        </Style>
+        <Style x:Key="TextBoxStyle">
+            <Setter Property="Control.Width" Value="100" />
+            <Setter Property="Control.Margin" Value="10 5 0 0" />
+            <Setter Property="Control.VerticalAlignment" Value="Bottom" />
+            <Setter Property="Control.HorizontalAlignment" Value="Left" />
+            <EventSetter Event="TextBox.TextChanged" Handler="TextBoxTextChanged" />
+            <EventSetter Event="TextBox.LostFocus" Handler="TextBoxLostFocus" />
+            <EventSetter Event="TextBox.PreviewTextInput" Handler="NumberValidationTextBox"/>
+        </Style>
+        <Style x:Key="ButtonStyle">
+            <Setter Property="Control.Width" Value="120" />
+            <Setter Property="Control.Margin" Value="10 15 10 0" />
+        </Style>
+        <Style x:Key="ButtonBuildGrafStyle">
+            <Setter Property="Control.Margin" Value="10 15 10 0" />
+            <Setter Property="Control.Width" Value="160" />
+            <Setter Property="Control.Height" Value="55"/>
+            <Setter Property="Control.FontSize" Value="13"/>
+            <Setter Property="Control.IsEnabled" Value="False"/>
+            <EventSetter Event="Button.Click" Handler="ClickBuildGraph" />
+        </Style>
+    </Window.Resources>
+    <Grid Background="#FAFAFA">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="600"></ColumnDefinition>
+            <ColumnDefinition ></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Border  Grid.Row="0" Grid.Column="0"  Margin="20 20 0 0" CornerRadius="5">
+            <ScrollViewer>
+                <StackPanel>
+                    <TextBlock Text="Исходные данные для расчета режимных параметров транспорта продукта при заданных условиях" Style="{StaticResource TextBlockTitleStyle}" />
+                    <CheckBox x:Name="checkBoxMainSettings" Content="Основные параметры для расчета газопровода" Checked="checkBoxMainSettings_Checked" Unchecked="checkBoxMainSettings_Unchecked" />
+                    <StackPanel x:Name="stackPanelMainSettings" Visibility="Collapsed" Margin="10 0 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Внутренний диаметр трубопровода в мм" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxInnerDiameter" Text="1000" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Наружный диаметр трубопровода в мм" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxOutsideDiameter" Text="1020" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Начальное давление в МПа" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxInitialPressure" Text="5,4" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Глубина заложения газопровода до оси в м" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxLayingDepth" Text="0,8" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Пропускная способность газопровода в млл. м^3/сут" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxGasPipelineCapacity" Text="36" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Начальная температура в кельвинах" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxInitialTemperature" Text="293" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Температура окружающей среды - средняя за период температура грунта на глубине заложения в естественном тепловом состоянии, в кельвинах" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxAmbientTemperature" Text="273" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Длина участка в км" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxPipelineLength" Text="145,8" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Средняя скорость ветра в м/c" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxAverageWindSpeed" Text="4" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Толщина изоляции в мм" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxInsulationThickness" Text="0" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент теплопроводности изоляции Вт/(м * К)" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxThermalConductivityCoefficientOfInsulation" Text="0,035" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент теплопроводности грунта Вт/(м * К)" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxSoilThermalConductivityCoefficient" Text="1" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Толщина снежного покрова в м" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxSnowThickness" Text="0,1" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент теплопроводности снежного покрова Вт/(м * К)" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxThermalConductivityCoefficientOfSnowCover" Text="0,1" Style="{StaticResource TextBoxStyle}"/>
+                        </StackPanel>
+                    </StackPanel >
+                    <CheckBox x:Name="checkBoxGasComposition" Content="Компонентный состав транспортируемого газа" Checked="checkBoxGasComposition_Checked" Unchecked="checkBoxGasComposition_Unchecked" />
+                    <StackPanel x:Name="stackPanelGasComposition" Visibility="Collapsed" Margin="10 0 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация метана CH4" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxМethaneСoncentration" Text="0,9728" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация этана C2H6" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxEthaneСoncentration" Text="0,0129" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация пропана C3H8" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxPropaneСoncentration" Text="0,00359" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация изо-Бутана C4H10" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxIsobutaneСoncentration" Text="0,00060" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация н-Бутана C4H10" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxButaneСoncentration" Text="0,00059" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация нео-Пентана C5H12" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxNeoPentaneСoncentration" Text="0,0000093" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация изо-Пентана C5H12" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxIsopentaneСoncentration" Text="0,000132" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация н-Пентана C5H12" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxPentaneСoncentration" Text="0,000085" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация Гексана C6H14+" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxHexanePlusСoncentration" Text="0,000068" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация азота N2" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxNitrogenСoncentration" Text="0,0083" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация диоксида углерода CO2" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxCO2Сoncentration" Text="0,00075" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация кислорода O2" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxOxygenСoncentration" Text="0,000069" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация гелия He" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxHeliumСoncentration" Text="0,000128" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Концентрация водорода H2" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxHydrogenСoncentration" Text="0,00001" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <TextBlock Text="Исходные данные для расчета продольных перемещений  " Style="{StaticResource TextBlockTitleStyle}" Width="385" />
+                    <CheckBox x:Name="checkBoxSettingsPipeline" Content="Основные параметры для расчета газопровода" Checked="checkBoxSettingsPipeline_Checked" Unchecked="checkBoxSettingsPipeline_Unchecked" />
+                    <StackPanel x:Name="stackPanelSettingsPipeline" Visibility="Collapsed" >
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Температурный перепад, ⁰C" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxTemperatureDifference" Text="20" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент надежности по нагрузке давлением" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxLoadReliabilityCoefficient" Text="1,1" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Модуль Юнга стали, МПа" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxYoungModulus" Text="210000" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент линейного расширения стали" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxLinearExpansionCoefficient" Text="0,000012" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент Пуассона для стали" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxPoissonCoefficient" Text="0,3" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Высота засыпки до верхней образующей трубы, м" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxFillHeight" Text="1" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Удельный вес стали трубы, Н/м3" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxPipeDensity" Text="77008,5" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент надежности по нагрузке массой продукта" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxProductMassReliabilityCoefficient" Text="0,95" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Погонный вес изоляции, Н/м" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxInsulationWeight" Text="14,23" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <CheckBox x:Name="checkBoxSoilCharacteristics" Content="Характеристики  грунта" Checked="checkBoxSoilCharacteristics_Checked" Unchecked="checkBoxSoilCharacteristics_Unchecked" />
+                    <StackPanel x:Name="stackPanelSoilCharacteristics" Visibility="Collapsed" Margin="10 0 0 0">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Угол внутреннего трения, рад" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxAngleOfFriction" Text="0,54105" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент сцепления грунта, Н/м2 (Па)" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxSoilCohesion" Text="2000" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Обобщенный коэффициент касательного сопротивления грунта, МПа/м" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxSoilFriction" Text="2,1" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Плотность грунта, кг/м3" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxSoilDensity" Text="1850" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Объемный вес грунта, Н/куб.м" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxSoilUnitWeight" Text="18148,5" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Коэффициент перегрузки" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxOverburdenCoefficient" Text="0,8" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="buttonClear" Content="Очистить" Style="{StaticResource ButtonStyle}" Click="ClickClear" />
+                        <Button x:Name="buttonInput" Content="Ввести" Style="{StaticResource ButtonStyle}" Click="ClickButtonInput"/>
+                    </StackPanel>
+                </StackPanel>
+                
+            </ScrollViewer>
+        </Border>
+        <Border Grid.Row="0" Grid.Column="1"  Margin="20 0 0 0" CornerRadius="5">
+            <StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Результаты расчета режимных параметров " Style="{StaticResource TextBlockTitleStyle}" Width="385" />
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Конечное давление на участке, МПа" Style="{StaticResource TextBlockStyle}" />
+                        <TextBox x:Name="textBoxEndPressure" Style="{StaticResource TextBoxStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Конечная температура на участке, К" Style="{StaticResource TextBlockStyle}" />
+                        <TextBox x:Name="textBoxFinalTemperature" Style="{StaticResource TextBoxStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Среднее давление на участке, МПа" Style="{StaticResource TextBlockStyle}" />
+                        <TextBox x:Name="textBoxAveragePressure" Style="{StaticResource TextBoxStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Средняя температура на участке, К" Style="{StaticResource TextBlockStyle}" />
+                        <TextBox x:Name="textBoxAverageTemperature" Style="{StaticResource TextBoxStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Средний коэффициент полной теплопередачи на участке" Style="{StaticResource TextBlockStyle}" />
+                        <TextBox x:Name="textBoxHeatTransferCoefficient" Style="{StaticResource TextBoxStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Средний коэффициент темпа падения температуры" Style="{StaticResource TextBlockStyle}" />
+                        <TextBox x:Name="textBoxTemperatureDropCoefficient" Style="{StaticResource TextBoxStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Средний коэффициент Джоуля-Томсона на участке, К/МПа" Style="{StaticResource TextBlockStyle}" />
+                        <TextBox x:Name="textBoxJouleThomsonCoefficient" Style="{StaticResource TextBoxStyle}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Средний коэффициент сжимаемости газа на участке" Style="{StaticResource TextBlockStyle}" />
+                        <TextBox x:Name="textBoxCompressibilityCoefficient" Style="{StaticResource TextBoxStyle}" />
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="buttinBuildPressure" Style="{StaticResource ButtonBuildGrafStyle}">
+                            <TextBlock Text="График падения давления по длине газопровода" TextWrapping="Wrap"/>
+                        </Button>
+                        <Button x:Name="buttinBuildTemperature" Style="{StaticResource ButtonBuildGrafStyle}">
+                            <TextBlock Text="График падения температуры по длине газопровода" TextWrapping="Wrap"/>
+                        </Button>
+                        <Button x:Name="buttinBuildSpeed" Style="{StaticResource ButtonBuildGrafStyle}">
+                            <TextBlock Text="График измененния скорости по длине газопровода" TextWrapping="Wrap"/>
+                        </Button>
+                    </StackPanel>
+
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Результаты расчета продольных перемещений" TextAlignment="Left"  Style="{StaticResource TextBlockTitleStyle}"   Width="510" />
+                    <Border Height="300" Width="510" HorizontalAlignment="Left">
+                        <Grid Height="275" Width="510">
+                            <Grid.Background>
+                                <ImageBrush ImageSource="Resources/image.jpg"
+                    Stretch="UniformToFill"/>
+                            </Grid.Background>
+                        </Grid>
+                    </Border>
+
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Продольное перемещение конца газопровода U, мм" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxLongitudinaMovement" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Длина участка, с которого собираются температурные перемещения L, м" Style="{StaticResource TextBlockStyle}" />
+                            <TextBox x:Name="textBoxSectionLength" Style="{StaticResource TextBoxStyle}" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>
